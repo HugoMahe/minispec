@@ -1,0 +1,4 @@
+<entity name="Satellite">
+2 <attribute name="nom" type="String"/>
+3 <attribute name="id" type="Integer"/>
+4 </entity>
