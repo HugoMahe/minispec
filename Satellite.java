@@ -1,4 +1,4 @@
-Public Class Satellite {
+public class Satellite {
 	String nom;
 	Integer id;
 }

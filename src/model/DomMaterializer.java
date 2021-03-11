@@ -1,9 +1,7 @@
 package model;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -20,6 +18,9 @@ import org.xml.sax.SAXException;
 
 public class DomMaterializer {
 	
+	Model model = new Model();
+	
+	/*
 	public File lectureDom() throws ParserConfigurationException, SAXException, IOException, URISyntaxException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
@@ -37,24 +38,64 @@ public class DomMaterializer {
 		contenu = "Public Class " + root.getAttribute("name").toString() + " {\n";
 		
 		NodeList listeAttributs = root.getElementsByTagName("attribute");
-		contenu = traitementAttribut(listeAttributs,contenu);
+		traitementAttribut(listeAttributs,contenu);
 		contenu = contenu + "}";
 		System.out.println(contenu);
 		sortie.createNewFile();
 		writeFile(nomFichier, contenu);
 		return null;
 	}
+	*/
+	
+	
+	public Model lecteurDom2() throws SAXException, IOException, ParserConfigurationException {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		File xml = new File("./resources/test.xml");
+		org.w3c.dom.Document document = builder.parse(xml);
+		document.getDocumentElement().normalize();
+		
+		
+		Element root = document.getDocumentElement();
+		System.out.println(root.getNodeName());
+		NodeList listeEntities = root.getElementsByTagName("entity");
+		System.out.println(listeEntities);
+		traitementListEntities(listeEntities);
+		System.out.println(model.entities);
+		return this.model;
+	}
+	
+	public void traitementListEntities(NodeList nl) {
+		for(int i=0; i<nl.getLength();i++) {
+			Node iNodeEntity = nl.item(i);
+			Element monElementEntity = (Element) iNodeEntity;
+			
+			// DECLARATION DE MON ELEMENT ENTITY
+			Entity entite = new Entity();
+			entite.nom=monElementEntity.getAttribute("name");
+			
+			// TRAITEMENT DES ATTRIBUTS DE L'ENTITE
+			NodeList listeAttributs = monElementEntity.getElementsByTagName("attribute");
+			this.traitementAttribut(listeAttributs, entite);
+			this.model.entities.add(entite);
+		}
+	}
+	
 
-	public String traitementAttribut(NodeList nl, String contenu) {
+	public void traitementAttribut(NodeList nl, Entity entité) {
 		for (int i=0; i<nl.getLength();i++) {
 			Node iNode = nl.item(i);
 			Element monElement = (Element) iNode;
-			String name =monElement.getAttribute("name");
-			String type = monElement.getAttribute("type");
-			contenu= contenu + "\t" + type + " " + name + ";\n";
+			Attribute attribut = new Attribute();
+			attribut.nom=monElement.getAttribute("name");
+			attribut.type=monElement.getAttribute("type");
+			attribut.entite=entité;
+			entité.attributes.add(attribut);
 		}
-		return contenu;
 	}
+	
+	
+	
 	
 	public void writeFile(String path,String contenu) throws IOException, URISyntaxException {
 		Files.write(Paths.get(path), contenu.getBytes(), StandardOpenOption.APPEND);
