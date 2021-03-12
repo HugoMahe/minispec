@@ -23,14 +23,14 @@ class testXML {
 		try {
 			Model monModel = dom.lecteurDom2();
 			System.out.println(monModel.entities);
-			assertTrue(monModel.entities.size()==2);
+			assertTrue(monModel.entities.size()==3);
 			for(Entity entity : monModel.entities) {
 				System.out.println(entity.attributes);
-				assertTrue(entity.attributes.size()==2);
 			}
 			
 			Visiteur visiteur = new Visiteur();
 			monModel.accept(visiteur);
+			visiteur.writeFiles();
 		} catch (ParserConfigurationException | SAXException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

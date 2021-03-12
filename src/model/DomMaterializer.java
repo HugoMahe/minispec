@@ -2,10 +2,6 @@ package model;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -74,6 +70,7 @@ public class DomMaterializer {
 			Entity entite = new Entity();
 			entite.nom=monElementEntity.getAttribute("name");
 			
+			
 			// TRAITEMENT DES ATTRIBUTS DE L'ENTITE
 			NodeList listeAttributs = monElementEntity.getElementsByTagName("attribute");
 			this.traitementAttribut(listeAttributs, entite);
@@ -84,20 +81,19 @@ public class DomMaterializer {
 
 	public void traitementAttribut(NodeList nl, Entity entité) {
 		for (int i=0; i<nl.getLength();i++) {
+			Attribute attribut = new Attribute();
 			Node iNode = nl.item(i);
 			Element monElement = (Element) iNode;
-			Attribute attribut = new Attribute();
 			attribut.nom=monElement.getAttribute("name");
 			attribut.type=monElement.getAttribute("type");
+			attribut.size=monElement.getAttribute("size");
+			attribut.min=monElement.getAttribute("min");
+			attribut.subType=monElement.getAttribute("subType");
+			attribut.max=monElement.getAttribute("max");
 			attribut.entite=entité;
 			entité.attributes.add(attribut);
 		}
+		
 	}
 	
-	
-	
-	
-	public void writeFile(String path,String contenu) throws IOException, URISyntaxException {
-		Files.write(Paths.get(path), contenu.getBytes(), StandardOpenOption.APPEND);
-	}
 }

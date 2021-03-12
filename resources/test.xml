@@ -3,9 +3,14 @@
 	<entity name="Satellite">
 	 	<attribute name="nom" type="String"/>
 	 	<attribute name="id" type="Integer"/>
+	 	<attribute name="parent" type="Flotte"/>
 	</entity>
 	<entity name="Balise">
 	 	<attribute name="nomBalise" type="String"/>
 	 	<attribute name="id" type="Integer"/>
+	 	<attribute name="Satellites" type="Set" min="1" max="5" subType="Satellite"/>
+	 	<attribute name="Satellites2" type="Array" size="3" subType="Satellite"/>
+	</entity>
+	<entity name="Flotte" subType="Balise">		
 	</entity>
 </root>

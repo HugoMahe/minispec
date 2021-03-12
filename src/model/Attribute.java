@@ -4,6 +4,10 @@ public class Attribute implements ElementVisitable {
 	public String nom;
 	public String type;
 	public Entity entite;
+	public String subType;
+	public String size;
+	public String min;
+	public String max;
 	
 	
 	
